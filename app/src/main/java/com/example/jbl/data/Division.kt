@@ -8,9 +8,5 @@ import androidx.room.PrimaryKey
 data class Division(
     @PrimaryKey  val id: String?,
     @ColumnInfo (name = "div_name") val divName: String?,
-    @ColumnInfo (name = "teams") val teams: List<Team>,
-    @ColumnInfo (name = "games_played") val GP: String?,
-    @ColumnInfo (name = "wins") val wins: Int?,
-    @ColumnInfo (name = "losses") val losses: Int?,
-    @ColumnInfo (name = "win_loss") val winLoss: Double?
+    @ColumnInfo (name = "teams") val teams: List<Team>
 )
