@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Division(
-    @PrimaryKey  val id: String?,
-    @ColumnInfo (name = "div_name") val divName: String?,
-    @ColumnInfo (name = "teams") val teams: List<Team>
+    @PrimaryKey val id: String?,
+    @ColumnInfo(name = "div_name") val divName: String?,
+    @ColumnInfo(name = "teams") val teams: List<Team>,
 )

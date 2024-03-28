@@ -1,9 +1,8 @@
-
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
@@ -28,7 +27,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -51,6 +50,21 @@ android {
         }
     }
 
+    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        debug.set(true)
+        android.set(true)
+        ignoreFailures.set(true)
+        outputToConsole.set(true)
+        outputColorName.set("RED")
+        kotlinScriptAdditionalPaths {
+            include(fileTree("scripts/"))
+        }
+        filter {
+            exclude("**/generated/**")
+            include("**/kotlin/**")
+        }
+    }
+
     dependencies {
 
         implementation("com.google.devtools.ksp:symbol-processing-api:1.9.0-1.0.13")
@@ -70,12 +84,13 @@ android {
         debugImplementation("androidx.compose.ui:ui-tooling")
         debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-        //KSP symbol processing
+        // KSP symbol processing
         implementation("com.google.devtools.ksp:symbol-processing-api:1.9.0-1.0.13")
 
         val roomVersion = "2.6.1"
+        val koinVersion = "3.5.1"
 
-        //ROOM
+        // ROOM
         ksp("androidx.room:room-compiler:$roomVersion")
         // Kotlin Extensions and Coroutines support for Room
         implementation("androidx.room:room-ktx:$roomVersion")
@@ -83,11 +98,15 @@ android {
         implementation("androidx.room:room-runtime:$roomVersion")
         annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
+        // Retrofit with GSON converter
         implementation("com.squareup.retrofit2:retrofit:2.9.0")
         implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-        //Dagger - Hilt
-        implementation("com.google.dagger:hilt-android:2.48")
-        ksp("com.google.dagger:hilt-compiler:2.48")
+
+        // Koin
+        implementation(platform("io.insert-koin:koin-bom:$koinVersion")) // automatically updates all koin libraries
+        implementation("io.insert-koin:koin-android")
+        implementation("io.insert-koin:koin-androidx-compose")
+        implementation("io.insert-koin:koin-core")
 
         // Test helpers
         testImplementation("androidx.room:room-testing:$roomVersion")
